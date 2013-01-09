@@ -1,0 +1,32 @@
+<?xml version="1.0"?> 
+<MPD 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns="urn:mpeg:DASH:schema:MPD:2011" 
+	xsi:schemaLocation="urn:mpeg:DASH:schema:MPD:2011 DASH-MPD.xsd" 
+	type="dynamic" 
+	minimumUpdatePeriod="PT20.0S" 
+	timeShiftBufferDepth="PT30M" 
+	availabilityStartTime="2013-01-07T09:56:00" 
+	minBufferTime="PT8.0S" 
+	profiles="urn:mpeg:dash:profile:isoff-live:2011"> 
+	
+	<BaseURL>http://localhost/tesi3</BaseURL> 
+	
+	<Period> 
+		<!-- Video --> 
+		<AdaptationSet 
+			mimeType="video/mp4" 
+			codecs="avc1.4D401F" 
+			segmentAlignment="true" 
+			startWithSAP="1">
+			<SegmentTemplate timescale="90000" 
+				initialization="/seg/bunny_150kbit_dash.mp4"
+				media="/seg/bunny_2s$Number%03$.m4s" 
+				duration="2"
+				startNumber="1"> </SegmentTemplate> 
+			<Representation id="0" width="320" height="240" mimeType="video/mp4" codecs="avc1.4d401f" bandwidth="89283"/> 
+		</AdaptationSet> 
+		
+	</Period> 
+		
+</MPD>
