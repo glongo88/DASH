@@ -30,6 +30,9 @@ function DASH_MPD_loaded()
 	var numS = Math.floor(checkDate(myMPD.availabilityStartTime) / myMPD.period[0].group[0].segmentTemplate.duration);
 	console.log("CheckDate(): "+checkDate(myMPD.availabilityStartTime));
 	console.log("Possibile numero segmento: "+numS);
+	if(numS<=0) {
+		numS=1;
+	}
 	extCount = numS;
 	console.log("extCount = "+extCount);
 	

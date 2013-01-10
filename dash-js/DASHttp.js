@@ -170,10 +170,14 @@ function _dashFetchSegmentBuffer(presentation, video, buffer)
     }
     baseURL = presentation.baseURL;
 	
-	_fetch_segment_for_buffer(presentation, (baseURL != 'undefined' ? presentation.baseURL : '') + myMPD.period[0].group[0].segmentTemplate.media.replace("$Number%03$", extCount), video, null, buffer);
-	
-	extCount++;
-	
+	if(myMPD.period[0].group[0].segmentTemplate!=undefined) {
+		_fetch_segment_for_buffer(presentation, (baseURL != 'undefined' ? presentation.baseURL : '') + myMPD.period[0].group[0].segmentTemplate.media.replace("$Number%03$", extCount), video, null, buffer);
+		extCount++;
+	} else {
+		_fetch_segment_for_buffer(presentation, (baseURL != 'undefined' ? presentation.baseURL : '') + adaptation._getNextChunkP(presentation, presentation.curSegment).src, video, adaptation._getNextChunk(presentation.curSegment).range, buffer);
+		presentation.curSegment++;
+	}
+
 }
 
 
