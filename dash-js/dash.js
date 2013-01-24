@@ -8,6 +8,10 @@ var segNotAvailable;
 var countSegmentRequest;
 var requestDate;
 var extContentType;
+var maxCount;
+var tOffset;
+var firstSegment;
+var segmentDuration;
 
 function updatePlaybackTime()
 {
@@ -18,7 +22,7 @@ function updatePlaybackTime()
 
 function DASH_MPD_loaded()
 {
-
+	
 	console.log('MPD Loaded: entering function DASH_MPD_loaded()...');
 	myBandwidth = new bandwidth(bps, 1.1, 0.9);
    
@@ -26,8 +30,10 @@ function DASH_MPD_loaded()
 	segNotAvailable = 0;
 	countSegmentRequest = 0;
 	
-    //extCount = 1;
-	var numS = Math.floor(checkDate(myMPD.availabilityStartTime) / myMPD.period[0].group[0].segmentTemplate.duration);
+	maxCount = 300;
+	
+	segmentDuration = myMPD.period[0].group[0].segmentTemplate.duration;
+	var numS = Math.floor(checkDate(myMPD.availabilityStartTime) / segmentDuration);
 	console.log("CheckDate(): "+checkDate(myMPD.availabilityStartTime));
 	console.log("Possibile numero segmento: "+numS);
 	if(numS<=0) {
@@ -35,6 +41,9 @@ function DASH_MPD_loaded()
 	}
 	extCount = numS;
 	console.log("extCount = "+extCount);
+	tOffset = -((numS - 1)*segmentDuration);
+	console.log("tOffset = "+tOffset);
+	firstSegment = true;
 	
 	adaptation = init_rateBasedAdaptation(dashInstance.mpdLoader.mpdparser.pmpd, dashInstance.videoTag, myBandwidth);
 	
@@ -74,6 +83,8 @@ function DASH_MPD_loaded()
 	dashInstance.MSE.addEventListener('webkitsourceended', onSourceEnded);
 	dashInstance.MSE.addEventListener('sourceended', onOpenSource, false);
 	
+	dashInstance.MSE.addEventListener('seeked', onSeek, false);
+	
 	overlayBuffer.addEventHandler(function(fillpercent, fillinsecs, max){ console.log("Event got called from overlay buffer, fillstate(%) = " + fillpercent + ", fillstate(s) = " + fillinsecs + ", max(s) = " + max); });
     
 
@@ -81,7 +92,6 @@ function DASH_MPD_loaded()
 
     
 }
-
 
 function DASHPlayer(videoTag, URLtoMPD)
 {

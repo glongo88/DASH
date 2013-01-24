@@ -50,7 +50,14 @@ function sourceBufferAppend(mediaSource, id, data)
 {
 	if(mediaSource.sourceBuffers[id]!=undefined) {
 		console.log("mediaSource.sourceBuffers["+id+"] is defined");
-		mediaSource.sourceBuffers[id].append(data);
+		if(firstSegment==true) {
+			firstSegment = false;
+			mediaSource.sourceBuffers[id].timestampOffset = tOffset;
+			mediaSource.sourceBuffers[id].append(data);
+		} else {
+			mediaSource.sourceBuffers[id].append(data);
+		}
+		
 	} else {
 		console.log("mediaSource.sourceBuffers["+id+"] is undefined");
 		mediaSource.endOfStream();

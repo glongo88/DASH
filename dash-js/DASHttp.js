@@ -68,7 +68,7 @@ function _fetch_segment(presentation, url, video, range, buffer)
     			    
 			    _push_segment_to_media_source_api(buffer, data);
     			    
-			    if(extCount==300) video.webkitSourceEndOfStream(HTMLMediaElement.EOS_NO_ERROR);
+			    if(extCount==maxCount) video.webkitSourceEndOfStream(HTMLMediaElement.EOS_NO_ERROR);
         
    		 };
 	
@@ -115,7 +115,7 @@ function _fetch_segment_for_buffer(presentation, url, video, range, buffer)
 			// push the data into our buffer - 2 sono secondi
 			buffer.push(data, 2);
 			
-			if(extCount==300) buffer.streamEnded = true;
+			if(extCount==maxCount) buffer.streamEnded = true;
 			
 			buffer.callback();
 		}
@@ -165,7 +165,7 @@ function _dashSourceOpen(buffer, presentation, video, mediaSource)
 function _dashFetchSegmentBuffer(presentation, video, buffer)
 {
 	console.log("extCount = "+extCount);
-	if(extCount==300) {
+	if(extCount==maxCount) {
         return; 
     }
     baseURL = presentation.baseURL;
